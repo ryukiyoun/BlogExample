@@ -8,8 +8,6 @@ import java.time.LocalDate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
 
 public class ReflectionTest {
 
@@ -34,10 +32,12 @@ public class ReflectionTest {
     }
 
     @Test
-    public void PackageReflectionClassNotFoundTest() throws Exception{
+    public void PackageReflectionClassTest() throws Exception{
         Class<?> couponClass = Class.forName("com.reflection.Coupon");
+        Class<?> couponClass2 = Coupon.class;
 
-        assertThat(couponClass, is(not(nullValue())));
+        assertThat(couponClass.getName(), is("com.reflection.Coupon"));
+        assertThat(couponClass2.getName(), is(couponClass.getName()));
     }
 
     @Test
@@ -46,6 +46,10 @@ public class ReflectionTest {
         Field[] fields = couponClass.getFields();
 
         assertThat(fields.length, is(1));
+
+        Field[] fields2 = Coupon.class.getFields();
+
+        assertThat(fields2.length, is(1));
     }
 
     @Test
@@ -53,7 +57,11 @@ public class ReflectionTest {
         Class<?> couponClass = Class.forName("com.reflection.Coupon");
         Field field = couponClass.getField("name");
 
-        assertThat(field, is(not(nullValue())));
+        assertThat(field.getName(), is("name"));
+
+        Field field2 = Coupon.class.getField("name");
+
+        assertThat(field2.getName(), is("name"));
     }
 
     @Test(expected = NoSuchFieldException.class)
@@ -68,6 +76,10 @@ public class ReflectionTest {
         Method[] methods = couponClass.getMethods();
 
         assertThat(methods.length, is(16));
+
+        Method[] methods2 = Coupon.class.getMethods();
+
+        assertThat(methods2.length, is(16));
     }
 
     @Test
@@ -75,7 +87,11 @@ public class ReflectionTest {
         Class<?> couponClass = Class.forName("com.reflection.Coupon");
         Method method = couponClass.getMethod("getDiscountAmount", int.class);
 
-        assertThat(method, is(not(nullValue())));
+        assertThat(method.getName(), is("getDiscountAmount"));
+
+        Method method2 = Coupon.class.getMethod("getDiscountAmount", int.class);
+
+        assertThat(method2.getName(), is("getDiscountAmount"));
     }
 
     @Test(expected = NoSuchMethodException.class)
