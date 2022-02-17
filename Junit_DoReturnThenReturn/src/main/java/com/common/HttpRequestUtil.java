@@ -11,7 +11,7 @@ public class HttpRequestUtil implements RequestUtil{
     HttpURLConnection httpURLConnection = null;
 
     @Override
-    public void Connection(String address) {
+    public void connection(String address) {
         try {
             httpURLConnection = (HttpURLConnection) (new URL(address).openConnection());
         }
@@ -21,7 +21,7 @@ public class HttpRequestUtil implements RequestUtil{
     }
 
     @Override
-    public String GetRequest(String param) {
+    public String getRequest(String param) {
         if(httpURLConnection != null){
             DataOutputStream out = null;
             BufferedReader in = null;

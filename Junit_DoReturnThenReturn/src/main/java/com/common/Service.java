@@ -1,10 +1,13 @@
 package com.common;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class Service {
-    RequestUtil httpRequestUtil;
+    private final RequestUtil httpRequestUtil;
 
     public String requestHttp(String URL, String param) {
-        httpRequestUtil.Connection(URL);
-        return httpRequestUtil.GetRequest(param);
+        httpRequestUtil.connection(URL);
+        return httpRequestUtil.getRequest(param);
     }
 }

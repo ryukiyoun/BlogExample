@@ -1,7 +1,7 @@
 package com.common;
 
 public interface RequestUtil {
-    void Connection(String address);
+    void connection(String address);
 
-    String GetRequest(String param);
+    String getRequest(String param);
 }
