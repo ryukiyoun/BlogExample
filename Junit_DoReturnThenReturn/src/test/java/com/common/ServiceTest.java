@@ -40,6 +40,7 @@ class ServiceTest {
 
         Service service = new Service(httpRequestUtil);
 
+        doNothing().when(httpRequestUtil).connection(anyString());
         when(httpRequestUtil.getRequest(anyString())).thenReturn("thenReturn result");
 
         assertThat(service.requestHttp("testURL", "testParam"), is("thenReturn result"));
@@ -51,6 +52,7 @@ class ServiceTest {
 
         Service service = new Service(httpRequestUtil);
 
+        doNothing().when(httpRequestUtil).connection(anyString());
         doReturn("doReturn result").when(httpRequestUtil).getRequest(anyString());
 
         assertThat(service.requestHttp("testURL", "testParam"), is("doReturn result"));
