@@ -6,7 +6,7 @@ import game.card.CardType;
 import java.util.*;
 
 public class StakeGenealogy implements Genealogy {
-    private final Set<Card[]> combinationHand = new HashSet<>();
+    private final Set<List<Card>> combinationHand = new HashSet<>();
 
     private void combinationCards(List<Card> hand, boolean[] checks, int index, int count) {
         if (count == 0) {
@@ -17,7 +17,7 @@ public class StakeGenealogy implements Genealogy {
                     combinationSelect.add(hand.get(i));
             }
 
-            combinationHand.add(combinationSelect.toArray(new Card[0]));
+            combinationHand.add(combinationSelect);
         } else {
             for (int i = index; i < hand.size(); i++) {
                 checks[i] = true;
@@ -28,9 +28,9 @@ public class StakeGenealogy implements Genealogy {
     }
 
     @Override
-    public String handName(Card... cards){
-        Card card1 = cards[0];
-        Card card2 = cards[1];
+    public String genealogyName(List<Card> cards){
+        Card card1 = cards.get(0);
+        Card card2 = cards.get(1);
 
         if (card1.getTag() == CardType.SKETCH && card2.getTag() == CardType.SKETCH)
             return card1.getNumber() + "." + card2.getNumber() + "광땡";
@@ -42,17 +42,17 @@ public class StakeGenealogy implements Genealogy {
     }
 
     @Override
-    public Card[] selectBestHand(List<Card> hand) {
+    public List<Card> selectBestHand(List<Card> hand) {
         combinationHand.clear();
         boolean[] checks = new boolean[hand.size()];
 
         this.combinationCards(hand, checks, 0, 2);
 
         int maxScore = 0;
-        Card[] maxCards = new Card[2];
+        List<Card> maxCards = new ArrayList<>();
 
-        for (Card[] cards : combinationHand) {
-            int score = calcScore(cards[0], cards[1]);
+        for (List<Card> cards : combinationHand) {
+            int score = calcScore(cards);
 
             if (maxScore < score) {
                 maxScore = score;
@@ -64,9 +64,9 @@ public class StakeGenealogy implements Genealogy {
     }
 
     @Override
-    public int calcScore(Card... cards) {
-        Card card1 = cards[0];
-        Card card2 = cards[1];
+    public int calcScore(List<Card> cards) {
+        Card card1 = cards.get(0);
+        Card card2 = cards.get(1);
 
         if (card1.getTag() == CardType.SKETCH && card2.getTag() == CardType.SKETCH) {
             if (card1.getNumber() == 3 && card2.getNumber() == 8)
