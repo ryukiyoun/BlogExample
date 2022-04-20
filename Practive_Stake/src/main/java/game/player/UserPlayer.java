@@ -14,7 +14,7 @@ public class UserPlayer implements Player{
 
     private final String name;
     private final List<Card> hand;
-    private final List<Card> bestHand;
+    private List<Card> bestHand;
     private int score;
 
     public UserPlayer(String name) {
@@ -26,16 +26,6 @@ public class UserPlayer implements Player{
     private void showHands(){
         System.out.println("----------------플레이어 패---------------");
         for (Card card : hand) System.out.println(card.toString());
-    }
-
-    private void selectBestHand(Scanner sc){
-        System.out.println("----------------카드 선택---------------");
-
-        for(int i=0; i<2; i++) {
-            int index = Integer.parseInt(sc.nextLine()) - 1;
-            index = index < 0 || index > hand.size() - 1 ? 0 : index;
-            bestHand.add(hand.get(index));
-        }
     }
 
     @Override
@@ -54,11 +44,26 @@ public class UserPlayer implements Player{
 
         showHands();
 
-        Scanner sc = new Scanner(System.in);
-        selectBestHand(sc);
+        bestHand = selectBestHand(hand);
 
         score = stakeGenealogy.calcScore(bestHand);
         hand.clear();
+    }
+
+    @Override
+    public List<Card> selectBestHand(List<Card> hand) {
+        System.out.println("----------------카드 선택---------------");
+        Scanner sc = new Scanner(System.in);
+
+        List<Card> list = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            int index = hand.size() != 2 ? Integer.parseInt(sc.nextLine()) - 1 : i;
+            index = index < 0 || index > hand.size() - 1 ? 0 : index;
+            list.add(hand.get(index));
+        }
+
+        return list;
     }
 
     @Override
