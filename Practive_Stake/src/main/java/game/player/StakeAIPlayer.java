@@ -9,10 +9,10 @@ import java.util.*;
 public class StakeAIPlayer implements Player {
     private static final Genealogy stakeGenealogy = new StakeGenealogy();
 
-    private final Set<List<Card>> combinationHand = new HashSet<>();
+    private final Set<List<Card<?>>> combinationHand = new HashSet<>();
     private final String name;
-    private final List<Card> hand;
-    private List<Card> bestHand;
+    private final List<Card<?>> hand;
+    private List<Card<?>> bestHand;
     private int score;
 
     public StakeAIPlayer(String name) {
@@ -20,9 +20,9 @@ public class StakeAIPlayer implements Player {
         this.name = name;
     }
 
-    private void combinationCards(List<Card> hand, boolean[] checks, int index, int count) {
+    private void combinationCards(List<Card<?>> hand, boolean[] checks, int index, int count) {
         if (count == 0) {
-            List<Card> combinationSelect = new ArrayList<>();
+            List<Card<?>> combinationSelect = new ArrayList<>();
 
             for (int i = 0; i < hand.size(); i++) {
                 if (checks[i])
@@ -40,7 +40,7 @@ public class StakeAIPlayer implements Player {
     }
 
     @Override
-    public void receiveCard(Card card) {
+    public void receiveCard(Card<?> card) {
         hand.add(card);
     }
 
@@ -51,7 +51,8 @@ public class StakeAIPlayer implements Player {
 
     @Override
     public void openHand() {
-        Collections.sort(hand);
+        hand.sort(Comparator.comparingInt(Card::getNumber));
+
         bestHand = selectBestHand(hand);
 
         this.score = stakeGenealogy.calcScore(bestHand);
@@ -59,16 +60,16 @@ public class StakeAIPlayer implements Player {
     }
 
     @Override
-    public List<Card> selectBestHand(List<Card> hand) {
+    public List<Card<?>> selectBestHand(List<Card<?>> hand) {
         combinationHand.clear();
         boolean[] checks = new boolean[hand.size()];
 
-        this.combinationCards(hand, checks, 0, 2);
+        combinationCards(hand, checks, 0, 2);
 
         int maxScore = -1;
-        List<Card> maxCards = new ArrayList<>();
+        List<Card<?>> maxCards = new ArrayList<>();
 
-        for (List<Card> cards : combinationHand) {
+        for (List<Card<?>> cards : combinationHand) {
             int score = stakeGenealogy.calcScore(cards);
 
             if (maxScore < score) {
@@ -83,8 +84,8 @@ public class StakeAIPlayer implements Player {
     @Override
     public String toString() {
         return this.name + "\n" +
-                bestHand.get(0).toString() + "\n" +
-                bestHand.get(1).toString() + "\n" +
+                bestHand.get(0) + "\n" +
+                bestHand.get(1) + "\n" +
                 stakeGenealogy.genealogyName(bestHand);
     }
 }

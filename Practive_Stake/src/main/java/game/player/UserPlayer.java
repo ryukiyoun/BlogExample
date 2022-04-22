@@ -5,16 +5,16 @@ import game.genealogy.Genealogy;
 import game.genealogy.StakeGenealogy;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserPlayer implements Player{
+public class UserPlayer implements Player {
     private static final Genealogy stakeGenealogy = new StakeGenealogy();
 
     private final String name;
-    private final List<Card> hand;
-    private List<Card> bestHand;
+    private final List<Card<?>> hand;
+    private List<Card<?>> bestHand;
     private int score;
 
     public UserPlayer(String name) {
@@ -25,11 +25,11 @@ public class UserPlayer implements Player{
 
     private void showHands(){
         System.out.println("----------------플레이어 패---------------");
-        for (Card card : hand) System.out.println(card.toString());
+        for (Card<?> card : hand) System.out.println(card.toString());
     }
 
     @Override
-    public void receiveCard(Card card) {
+    public void receiveCard(Card<?> card) {
         hand.add(card);
     }
 
@@ -40,7 +40,7 @@ public class UserPlayer implements Player{
 
     @Override
     public void openHand() {
-        Collections.sort(hand);
+        hand.sort(Comparator.comparingInt(Card::getNumber));
 
         showHands();
 
@@ -51,11 +51,11 @@ public class UserPlayer implements Player{
     }
 
     @Override
-    public List<Card> selectBestHand(List<Card> hand) {
+    public List<Card<?>> selectBestHand(List<Card<?>> hand) {
         System.out.println("----------------카드 선택---------------");
         Scanner sc = new Scanner(System.in);
 
-        List<Card> list = new ArrayList<>();
+        List<Card<?>> list = new ArrayList<>();
 
         for (int i = 0; i < 2; i++) {
             int index = hand.size() != 2 ? Integer.parseInt(sc.nextLine()) - 1 : i;
@@ -68,9 +68,9 @@ public class UserPlayer implements Player{
 
     @Override
     public String toString() {
-        return name + "\n" +
-                bestHand.get(0).toString() + "\n" +
-                bestHand.get(1).toString() + "\n" +
+        return this.name + "\n" +
+                bestHand.get(0) + "\n" +
+                bestHand.get(1) + "\n" +
                 stakeGenealogy.genealogyName(bestHand);
     }
 }

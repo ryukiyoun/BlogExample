@@ -33,15 +33,11 @@ public class Game {
 
         dealer.shuffleCardDeck();
 
-        for(int i=0; i<PLAYER_CARD_COUNT; i++)
-            dealer.drawCard(players);
+        handOutCards2Player(players, dealer);
 
-        for(Player player : players)
-            player.openHand();
+        playerHandOpen(players);
 
-        System.out.println("최종 우승자");
-        for(Player player : dealer.getWinner(players))
-            System.out.println(player.toString());
+        showWinner(players, dealer);
     }
 
     private void selectStakeType(Scanner sc){
@@ -68,5 +64,23 @@ public class Game {
     private Player initPlayer(Scanner sc){
         System.out.println("플레이어 이름 입력");
         return new UserPlayer(sc.nextLine());
+    }
+
+    private void handOutCards2Player(List<Player> players, Dealer dealer){
+        for(int i=0; i<PLAYER_CARD_COUNT; i++) {
+            for(Player player : players)
+                player.receiveCard(dealer.drawCard());
+        }
+    }
+
+    private void playerHandOpen(List<Player> players){
+        for(Player player : players)
+            player.openHand();
+    }
+
+    private void showWinner(List<Player> players, Dealer dealer){
+        System.out.println("최종 우승자");
+        for(Player player : dealer.getWinner(players))
+            System.out.println(player.toString());
     }
 }

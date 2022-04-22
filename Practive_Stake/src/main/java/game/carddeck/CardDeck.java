@@ -4,5 +4,5 @@ import game.card.Card;
 
 public interface CardDeck {
     void deckShuffle();
-    Card handOutCard();
+    Card<?> handOutCard();
 }

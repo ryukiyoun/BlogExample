@@ -1,5 +1,6 @@
 package game.dealer;
 
+import game.card.Card;
 import game.carddeck.CardDeck;
 import game.player.Player;
 
@@ -22,9 +23,8 @@ public class StakeDealer implements Dealer {
     }
 
     @Override
-    public void drawCard(List<Player> players) {
-        for(Player player : players)
-            player.receiveCard(stakeCardDeck.handOutCard());
+    public Card<?> drawCard() {
+        return stakeCardDeck.handOutCard();
     }
 
     @Override
