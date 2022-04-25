@@ -2,7 +2,6 @@ package game.player;
 
 import game.card.Card;
 import game.genealogy.Genealogy;
-import game.genealogy.StakeGenealogy;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,17 +9,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserPlayer implements Player {
-    private static final Genealogy stakeGenealogy = new StakeGenealogy();
+    private final Genealogy genealogy;
 
     private final String name;
     private final List<Card<?>> hand;
     private List<Card<?>> bestHand;
-    private int score;
 
-    public UserPlayer(String name) {
+    public UserPlayer(String name, Genealogy genealogy) {
         this.hand = new ArrayList<>();
         this.bestHand = new ArrayList<>();
         this.name = name;
+        this.genealogy = genealogy;
     }
 
     private void showHands(){
@@ -28,30 +27,7 @@ public class UserPlayer implements Player {
         for (Card<?> card : hand) System.out.println(card.toString());
     }
 
-    @Override
-    public void receiveCard(Card<?> card) {
-        hand.add(card);
-    }
-
-    @Override
-    public int getScore() {
-        return this.score;
-    }
-
-    @Override
-    public void openHand() {
-        hand.sort(Comparator.comparingInt(Card::getNumber));
-
-        showHands();
-
-        bestHand = selectBestHand(hand);
-
-        score = stakeGenealogy.calcScore(bestHand);
-        hand.clear();
-    }
-
-    @Override
-    public List<Card<?>> selectBestHand(List<Card<?>> hand) {
+    private List<Card<?>> chooseCards(){
         System.out.println("----------------카드 선택---------------");
         Scanner sc = new Scanner(System.in);
 
@@ -67,10 +43,34 @@ public class UserPlayer implements Player {
     }
 
     @Override
+    public void receiveCard(Card<?> card) {
+        hand.add(card);
+    }
+
+    @Override
+    public int getScore() {
+        if(bestHand.isEmpty())
+            throw new RuntimeException("Not Select Best Hand");
+
+        return genealogy.calcScore(bestHand);
+    }
+
+    @Override
+    public void selectBestCards() {
+        hand.sort(Comparator.comparingInt(Card::getNumber));
+
+        showHands();
+
+        bestHand = chooseCards();
+
+        hand.clear();
+    }
+
+    @Override
     public String toString() {
         return this.name + "\n" +
                 bestHand.get(0) + "\n" +
                 bestHand.get(1) + "\n" +
-                stakeGenealogy.genealogyName(bestHand);
+                genealogy.genealogyName(bestHand);
     }
 }

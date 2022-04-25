@@ -2,22 +2,21 @@ package game.player;
 
 import game.card.Card;
 import game.genealogy.Genealogy;
-import game.genealogy.StakeGenealogy;
 
 import java.util.*;
 
-public class StakeAIPlayer implements Player {
-    private static final Genealogy stakeGenealogy = new StakeGenealogy();
+public class AIPlayer implements Player {
+    private final Genealogy genealogy;
 
     private final Set<List<Card<?>>> combinationHand = new HashSet<>();
     private final String name;
     private final List<Card<?>> hand;
     private List<Card<?>> bestHand;
-    private int score;
 
-    public StakeAIPlayer(String name) {
+    public AIPlayer(String name, Genealogy genealogy) {
         this.hand = new ArrayList<>();
         this.name = name;
+        this.genealogy = genealogy;
     }
 
     private void combinationCards(List<Card<?>> hand, boolean[] checks, int index, int count) {
@@ -46,39 +45,33 @@ public class StakeAIPlayer implements Player {
 
     @Override
     public int getScore() {
-        return this.score;
+        if(bestHand.isEmpty())
+            throw new RuntimeException("Not Select Best Hand");
+
+        return genealogy.calcScore(bestHand);
     }
 
     @Override
-    public void openHand() {
+    public void selectBestCards() {
         hand.sort(Comparator.comparingInt(Card::getNumber));
 
-        bestHand = selectBestHand(hand);
-
-        this.score = stakeGenealogy.calcScore(bestHand);
-        this.hand.clear();
-    }
-
-    @Override
-    public List<Card<?>> selectBestHand(List<Card<?>> hand) {
         combinationHand.clear();
         boolean[] checks = new boolean[hand.size()];
 
         combinationCards(hand, checks, 0, 2);
 
         int maxScore = -1;
-        List<Card<?>> maxCards = new ArrayList<>();
 
         for (List<Card<?>> cards : combinationHand) {
-            int score = stakeGenealogy.calcScore(cards);
+            int score = genealogy.calcScore(cards);
 
             if (maxScore < score) {
                 maxScore = score;
-                maxCards = cards;
+                bestHand = cards;
             }
         }
 
-        return maxCards;
+        hand.clear();
     }
 
     @Override
@@ -86,6 +79,6 @@ public class StakeAIPlayer implements Player {
         return this.name + "\n" +
                 bestHand.get(0) + "\n" +
                 bestHand.get(1) + "\n" +
-                stakeGenealogy.genealogyName(bestHand);
+                genealogy.genealogyName(bestHand);
     }
 }
