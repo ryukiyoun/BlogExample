@@ -4,8 +4,9 @@ import game.carddeck.CardDeck;
 import game.carddeck.StakeCardDeck;
 import game.dealer.Dealer;
 import game.dealer.StakeDealer;
+import game.genealogy.StakeGenealogy;
 import game.player.Player;
-import game.player.StakeAIPlayer;
+import game.player.AIPlayer;
 import game.player.UserPlayer;
 
 import java.util.ArrayList;
@@ -56,14 +57,14 @@ public class Game {
         List<Player> players = new ArrayList<>();
 
         for(int i=0; i<AI_PLAYER_COUNT; i++)
-            players.add(new StakeAIPlayer("AI-" + i));
+            players.add(new AIPlayer("AI-" + i, new StakeGenealogy()));
 
         return players;
     }
 
     private Player initPlayer(Scanner sc){
         System.out.println("플레이어 이름 입력");
-        return new UserPlayer(sc.nextLine());
+        return new UserPlayer(sc.nextLine(), new StakeGenealogy());
     }
 
     private void handOutCards2Player(List<Player> players, Dealer dealer){
@@ -75,7 +76,7 @@ public class Game {
 
     private void playerHandOpen(List<Player> players){
         for(Player player : players)
-            player.openHand();
+            player.selectBestCards();
     }
 
     private void showWinner(List<Player> players, Dealer dealer){
