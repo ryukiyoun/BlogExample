@@ -14,8 +14,9 @@ public class CombinationCards {
         this.combinationHand = new HashSet<>();
     }
 
-    public Set<List<Card>> calcCombination(List<Card> cards, boolean[] isConfirm, int index, int count){
-        combinationCards(cards, isConfirm, index, count);
+    public Set<List<Card>> calcCombination(List<Card> cards, int count){
+        boolean[] Confirms = new boolean[cards.size()];
+        combinationCards(cards, Confirms, 0, count);
         return combinationHand;
     }
 

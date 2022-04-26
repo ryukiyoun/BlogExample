@@ -33,8 +33,7 @@ public class AIPlayer implements Player {
     }
 
     private Set<List<Card>> getCardCombination() {
-        boolean[] checks = new boolean[hand.size()];
-        return new CombinationCards().calcCombination(hand, checks, 0, 2);
+        return new CombinationCards().calcCombination(hand, 2);
     }
 
     @Override
