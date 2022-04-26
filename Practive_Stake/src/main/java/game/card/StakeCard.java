@@ -1,6 +1,6 @@
 package game.card;
 
-public class StakeCard implements Card<StakeCardType>, Comparable<StakeCard>{
+public class StakeCard implements Card, Comparable<StakeCard>{
     private final StakeCardType type;
     private final int number;
 
@@ -10,8 +10,8 @@ public class StakeCard implements Card<StakeCardType>, Comparable<StakeCard>{
     }
 
     @Override
-    public StakeCardType getType() {
-        return type;
+    public <T> boolean isSameType(T type) {
+        return this.type.equals(type);
     }
 
     @Override

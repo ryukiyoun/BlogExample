@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface Dealer {
     void shuffleCardDeck();
-    Card<?> drawCard();
+    Card drawCard();
     List<Player> getWinner(List<Player> players);
 }

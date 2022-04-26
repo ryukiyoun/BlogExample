@@ -23,7 +23,7 @@ public class StakeDealer implements Dealer {
     }
 
     @Override
-    public Card<?> drawCard() {
+    public Card drawCard() {
         return stakeCardDeck.handOutCard();
     }
 

@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class StakeCardDeck implements CardDeck {
     private static final int CARD_COUNT = 20;
-    private static final Card<?>[] cards = new StakeCard[] {
+    private static final Card[] cards = new StakeCard[] {
             new StakeCard(StakeCardType.NORMAL, 1),
             new StakeCard(StakeCardType.NORMAL, 2),
             new StakeCard(StakeCardType.NORMAL, 3),
@@ -57,7 +57,7 @@ public class StakeCardDeck implements CardDeck {
     }
 
     @Override
-    public Card<?> handOutCard(){
+    public Card handOutCard(){
         return cards[deckOrder.pop()];
     }
 }
