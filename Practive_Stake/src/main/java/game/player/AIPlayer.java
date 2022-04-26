@@ -1,6 +1,7 @@
 package game.player;
 
 import game.card.Card;
+import game.combination.CombinationCards;
 import game.genealogy.Genealogy;
 
 import java.util.*;
@@ -8,10 +9,9 @@ import java.util.*;
 public class AIPlayer implements Player {
     private final Genealogy genealogy;
 
-    private final Set<List<Card<?>>> combinationHand = new HashSet<>();
     private final String name;
-    private final List<Card<?>> hand;
-    private List<Card<?>> bestHand;
+    private final List<Card> hand;
+    private List<Card> bestHand;
 
     public AIPlayer(String name, Genealogy genealogy) {
         this.hand = new ArrayList<>();
@@ -19,28 +19,28 @@ public class AIPlayer implements Player {
         this.genealogy = genealogy;
     }
 
-    private void combinationCards(List<Card<?>> hand, boolean[] checks, int index, int count) {
-        if (count == 0) {
-            List<Card<?>> combinationSelect = new ArrayList<>();
+    private void selectMaxScoreCardSet(Set<List<Card>> combinationCards) {
+        int maxScore = -1;
 
-            for (int i = 0; i < hand.size(); i++) {
-                if (checks[i])
-                    combinationSelect.add(hand.get(i));
-            }
+        for (List<Card> cards : combinationCards) {
+            int score = genealogy.calcScore(cards);
 
-            combinationHand.add(combinationSelect);
-        } else {
-            for (int i = index; i < hand.size(); i++) {
-                checks[i] = true;
-                combinationCards(hand, checks, i + 1, count - 1);
-                checks[i] = false;
+            if (maxScore < score) {
+                maxScore = score;
+                bestHand = cards;
             }
         }
     }
 
+    private Set<List<Card>> getCardCombination() {
+        boolean[] checks = new boolean[hand.size()];
+        return new CombinationCards().calcCombination(hand, checks, 0, 2);
+    }
+
     @Override
-    public void receiveCard(Card<?> card) {
+    public void receiveCard(Card card) {
         hand.add(card);
+        hand.sort(Comparator.comparingInt(Card::getNumber));
     }
 
     @Override
@@ -53,24 +53,7 @@ public class AIPlayer implements Player {
 
     @Override
     public void selectBestCards() {
-        hand.sort(Comparator.comparingInt(Card::getNumber));
-
-        combinationHand.clear();
-        boolean[] checks = new boolean[hand.size()];
-
-        combinationCards(hand, checks, 0, 2);
-
-        int maxScore = -1;
-
-        for (List<Card<?>> cards : combinationHand) {
-            int score = genealogy.calcScore(cards);
-
-            if (maxScore < score) {
-                maxScore = score;
-                bestHand = cards;
-            }
-        }
-
+        selectMaxScoreCardSet(getCardCombination());
         hand.clear();
     }
 

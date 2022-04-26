@@ -12,8 +12,8 @@ public class UserPlayer implements Player {
     private final Genealogy genealogy;
 
     private final String name;
-    private final List<Card<?>> hand;
-    private List<Card<?>> bestHand;
+    private final List<Card> hand;
+    private List<Card> bestHand;
 
     public UserPlayer(String name, Genealogy genealogy) {
         this.hand = new ArrayList<>();
@@ -24,14 +24,14 @@ public class UserPlayer implements Player {
 
     private void showHands(){
         System.out.println("----------------플레이어 패---------------");
-        for (Card<?> card : hand) System.out.println(card.toString());
+        for (Card card : hand) System.out.println(card.toString());
     }
 
-    private List<Card<?>> chooseCards(){
+    private List<Card> chooseCards(){
         System.out.println("----------------카드 선택---------------");
         Scanner sc = new Scanner(System.in);
 
-        List<Card<?>> list = new ArrayList<>();
+        List<Card> list = new ArrayList<>();
 
         for (int i = 0; i < 2; i++) {
             int index = hand.size() != 2 ? Integer.parseInt(sc.nextLine()) - 1 : i;
@@ -43,8 +43,9 @@ public class UserPlayer implements Player {
     }
 
     @Override
-    public void receiveCard(Card<?> card) {
+    public void receiveCard(Card card) {
         hand.add(card);
+        hand.sort(Comparator.comparingInt(Card::getNumber));
     }
 
     @Override
@@ -57,10 +58,7 @@ public class UserPlayer implements Player {
 
     @Override
     public void selectBestCards() {
-        hand.sort(Comparator.comparingInt(Card::getNumber));
-
         showHands();
-
         bestHand = chooseCards();
 
         hand.clear();
