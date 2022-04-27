@@ -5,13 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CombinationGenerator<T>{
+public class CombinationGenerator<T> implements Combination<T>{
     private final Set<List<T>> combinationHand;
 
     public CombinationGenerator() {
         this.combinationHand = new HashSet<>();
     }
 
+    @Override
     public Set<List<T>> generate(List<T> cards, int count){
         boolean[] Confirms = new boolean[cards.size()];
         combination(cards, Confirms, 0, count);
