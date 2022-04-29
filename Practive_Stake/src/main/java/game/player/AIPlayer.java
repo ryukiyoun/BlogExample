@@ -1,22 +1,27 @@
 package game.player;
 
 import game.card.Card;
-import game.combination.CombinationCards;
+import game.combination.Combination;
 import game.genealogy.Genealogy;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 public class AIPlayer implements Player {
     private final Genealogy genealogy;
+    private final Combination<Card> combinationGenerator;
 
     private final String name;
     private final List<Card> hand;
     private List<Card> bestHand;
 
-    public AIPlayer(String name, Genealogy genealogy) {
+    public AIPlayer(String name, Genealogy genealogy, Combination<Card> combinationGenerator) {
         this.hand = new ArrayList<>();
         this.name = name;
         this.genealogy = genealogy;
+        this.combinationGenerator = combinationGenerator;
     }
 
     private void selectMaxScoreCardSet(Set<List<Card>> combinationCards) {
@@ -33,7 +38,7 @@ public class AIPlayer implements Player {
     }
 
     private Set<List<Card>> getCardCombination() {
-        return new CombinationCards().calcCombination(hand, 2);
+        return combinationGenerator.generate(hand, 2);
     }
 
     @Override
@@ -45,7 +50,7 @@ public class AIPlayer implements Player {
     @Override
     public int getScore() {
         if(bestHand.isEmpty())
-            throw new RuntimeException("Not Select Best Hand");
+            return 0;
 
         return genealogy.calcScore(bestHand);
     }

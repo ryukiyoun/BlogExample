@@ -51,7 +51,7 @@ public class UserPlayer implements Player {
     @Override
     public int getScore() {
         if(bestHand.isEmpty())
-            throw new RuntimeException("Not Select Best Hand");
+            return 0;
 
         return genealogy.calcScore(bestHand);
     }
