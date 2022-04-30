@@ -14,8 +14,8 @@ public class CombinationGenerator<T> implements Combination<T>{
 
     @Override
     public Set<List<T>> generate(List<T> cards, int count){
-        boolean[] Confirms = new boolean[cards.size()];
-        combination(cards, Confirms, 0, count);
+        boolean[] confirms = new boolean[cards.size()];
+        combination(cards, confirms, 0, count);
         return combinationHand;
     }
 
@@ -25,6 +25,10 @@ public class CombinationGenerator<T> implements Combination<T>{
             return;
         }
 
+        recursiveCombination(hand, checks, startIndex, loopCount);
+    }
+
+    private void recursiveCombination(List<T> hand, boolean[] checks, int startIndex, int loopCount) {
         for (int i = startIndex; i < hand.size(); i++) {
             checks[i] = true;
             combination(hand, checks, i + 1, loopCount - 1);
