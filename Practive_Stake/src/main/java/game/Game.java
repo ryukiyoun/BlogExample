@@ -2,11 +2,12 @@ package game;
 
 import game.carddeck.CardDeck;
 import game.carddeck.StakeCardDeck;
+import game.combination.CombinationGenerator;
 import game.dealer.Dealer;
 import game.dealer.StakeDealer;
 import game.genealogy.StakeGenealogy;
-import game.player.Player;
 import game.player.AIPlayer;
+import game.player.Player;
 import game.player.UserPlayer;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class Game {
         List<Player> players = new ArrayList<>();
 
         for(int i=0; i<AI_PLAYER_COUNT; i++)
-            players.add(new AIPlayer("AI-" + i, new StakeGenealogy()));
+            players.add(new AIPlayer("AI-" + i, new StakeGenealogy(), new CombinationGenerator<>()));
 
         return players;
     }
