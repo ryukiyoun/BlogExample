@@ -1,6 +1,7 @@
 package game.player;
 
 import game.card.Card;
+import game.card.StakeCard;
 import game.combination.Combination;
 import game.genealogy.Genealogy;
 
@@ -9,25 +10,25 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-public class AIPlayer implements Player {
-    private final Genealogy genealogy;
-    private final Combination<Card> combinationGenerator;
+public class StakeAIPlayer implements Player<StakeCard> {
+    private final Genealogy<StakeCard> genealogy;
+    private final Combination<StakeCard> combinationGenerator;
 
     private final String name;
-    private final List<Card> hand;
-    private List<Card> bestHand;
+    private final List<StakeCard> hand;
+    private List<StakeCard> bestHand;
 
-    public AIPlayer(String name, Genealogy genealogy, Combination<Card> combinationGenerator) {
+    public StakeAIPlayer(String name, Genealogy<StakeCard> genealogy, Combination<StakeCard> combinationGenerator) {
         this.hand = new ArrayList<>();
         this.name = name;
         this.genealogy = genealogy;
         this.combinationGenerator = combinationGenerator;
     }
 
-    private void selectMaxScoreCardSet(Set<List<Card>> combinationCards) {
+    private void selectMaxScoreCardSet(Set<List<StakeCard>> combinationCards) {
         int maxScore = -1;
 
-        for (List<Card> cards : combinationCards) {
+        for (List<StakeCard> cards : combinationCards) {
             int score = genealogy.calcScore(cards);
 
             if (maxScore < score) {
@@ -37,12 +38,12 @@ public class AIPlayer implements Player {
         }
     }
 
-    private Set<List<Card>> getCardCombination() {
+    private Set<List<StakeCard>> getCardCombination() {
         return combinationGenerator.generate(hand, 2);
     }
 
     @Override
-    public void receiveCard(Card card) {
+    public void receiveCard(StakeCard card) {
         hand.add(card);
         hand.sort(Comparator.comparingInt(Card::getNumber));
     }

@@ -9,9 +9,12 @@ public class StakeCard implements Card, Comparable<StakeCard>{
         this.number = number;
     }
 
-    @Override
-    public <T> boolean isSameType(T type) {
-        return this.type.equals(type);
+    public boolean isGwang(){
+        return this.type.equals(StakeCardType.SKETCH);
+    }
+
+    public boolean isSameCardNumber(StakeCard card){
+        return this.number == card.number;
     }
 
     @Override

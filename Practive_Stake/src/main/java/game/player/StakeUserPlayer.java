@@ -8,14 +8,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserPlayer implements Player {
+public class StakeUserPlayer implements Player {
     private final Genealogy genealogy;
 
     private final String name;
     private final List<Card> hand;
     private List<Card> bestHand;
 
-    public UserPlayer(String name, Genealogy genealogy) {
+    public StakeUserPlayer(String name, Genealogy genealogy) {
         this.hand = new ArrayList<>();
         this.bestHand = new ArrayList<>();
         this.name = name;

@@ -4,7 +4,7 @@ import game.card.Card;
 
 import java.util.List;
 
-public interface Genealogy {
-    int calcScore(List<Card> cards);
-    String genealogyName(List<Card> cards);
+public interface Genealogy<T extends Card> {
+    int calcScore(List<T> cards);
+    String genealogyName(List<T> cards);
 }
