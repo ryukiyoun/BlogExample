@@ -23,12 +23,12 @@ public class StakeDealer implements Dealer {
     }
 
     @Override
-    public Card drawCard() {
+    public <T extends Card> T drawCard() {
         return stakeCardDeck.handOutCard();
     }
 
     @Override
-    public List<Player> getWinner(List<Player> players) {
+    public <T extends Card> List<Player<T>> getWinner(List<Player<T>> players) {
         return players.stream()
                 .collect(groupingBy(Player::getScore))
                 .entrySet()
