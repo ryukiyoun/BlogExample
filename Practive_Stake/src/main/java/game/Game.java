@@ -1,14 +1,15 @@
 package game;
 
+import game.card.StakeCard;
 import game.carddeck.CardDeck;
 import game.carddeck.StakeCardDeck;
 import game.combination.CombinationGenerator;
 import game.dealer.Dealer;
 import game.dealer.StakeDealer;
 import game.genealogy.StakeGenealogy;
-import game.player.AIPlayer;
+import game.player.StakeAIPlayer;
 import game.player.Player;
-import game.player.UserPlayer;
+import game.player.StakeUserPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Game {
         selectStakeType(sc);
         selectAIPlayer(sc);
 
-        List<Player> players = makeAIPlayer();
+        List<Player<StakeCard>> players = makeAIPlayer();
 
         players.add(initPlayer(sc));
 
@@ -54,35 +55,35 @@ public class Game {
         AI_PLAYER_COUNT = AI_PLAYER_COUNT > 0 && AI_PLAYER_COUNT < 4 ? AI_PLAYER_COUNT : 3;
     }
 
-    private List<Player> makeAIPlayer(){
-        List<Player> players = new ArrayList<>();
+    private List<Player<StakeCard>> makeAIPlayer(){
+        List<Player<StakeCard>> players = new ArrayList<>();
 
         for(int i=0; i<AI_PLAYER_COUNT; i++)
-            players.add(new AIPlayer("AI-" + i, new StakeGenealogy(), new CombinationGenerator<>()));
+            players.add(new StakeAIPlayer("AI-" + i, new StakeGenealogy(), new CombinationGenerator<>()));
 
         return players;
     }
 
-    private Player initPlayer(Scanner sc){
+    private Player<StakeCard> initPlayer(Scanner sc){
         System.out.println("플레이어 이름 입력");
-        return new UserPlayer(sc.nextLine(), new StakeGenealogy());
+        return new StakeUserPlayer(sc.nextLine(), new StakeGenealogy());
     }
 
-    private void handOutCards2Player(List<Player> players, Dealer dealer){
+    private void handOutCards2Player(List<Player<StakeCard>> players, Dealer dealer){
         for(int i=0; i<PLAYER_CARD_COUNT; i++) {
-            for(Player player : players)
+            for(Player<StakeCard> player : players)
                 player.receiveCard(dealer.drawCard());
         }
     }
 
-    private void playerHandOpen(List<Player> players){
-        for(Player player : players)
+    private void playerHandOpen(List<Player<StakeCard>> players){
+        for(Player<StakeCard> player : players)
             player.selectBestCards();
     }
 
-    private void showWinner(List<Player> players, Dealer dealer){
+    private void showWinner(List<Player<StakeCard>> players, Dealer dealer){
         System.out.println("최종 우승자");
-        for(Player player : dealer.getWinner(players))
+        for(Player<StakeCard> player : dealer.getWinner(players))
             System.out.println(player.toString());
     }
 }
