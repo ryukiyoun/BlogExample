@@ -12,7 +12,7 @@ public class StakeGenealogy implements Genealogy<StakeCard> {
 
         if (card1.isGwang() && card2.isGwang()) return card1.getNumber() + "." + card2.getNumber() + "광땡";
 
-        if (card1.isSameCardNumber(card2)) return card1.getNumber() == 10 ? "장땡" : card1.getNumber() + "땡";
+        if (card1.isSameNumber(card2)) return card1.getNumber() == 10 ? "장땡" : card1.getNumber() + "땡";
 
         return card1.getNumber() + card2.getNumber() >= 10 ? (card1.getNumber() + card2.getNumber()) - 10 + "끗" : card1.getNumber() + card2.getNumber() + "끗";
     }
@@ -25,7 +25,7 @@ public class StakeGenealogy implements Genealogy<StakeCard> {
         if (card1.isGwang() && card2.isGwang())
             return 100;
 
-        if (card1.isSameCardNumber(card2))
+        if (card1.isSameNumber(card2))
             return 90 + (card1.getNumber() - 2);
 
         return card1.getNumber() + card2.getNumber() >= 10 ? (card1.getNumber() + card2.getNumber()) - 10 : card1.getNumber() + card2.getNumber();
