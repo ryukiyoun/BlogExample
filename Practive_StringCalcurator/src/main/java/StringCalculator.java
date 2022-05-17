@@ -1,5 +1,11 @@
 public class StringCalculator {
-    public void calculate(){
-        Formula formula = new Formula(new StringInput().inputCalcString());
+    private Formula formula;
+
+    public StringCalculator(Formula formula) {
+        this.formula = formula;
+    }
+
+    public int calcString(){
+        return formula.calc();
     }
 }
