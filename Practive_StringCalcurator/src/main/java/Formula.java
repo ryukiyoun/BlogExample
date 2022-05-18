@@ -34,22 +34,27 @@ public class Formula {
         int result = Integer.parseInt(numbers.get(0));
 
         for (int i = 0; i < operators.size(); i++) {
-            switch (operators.get(i)) {
-                case "+":
-                    result = calcAdd(result, Integer.parseInt(numbers.get(i + 1)));
-                    break;
-                case "-":
-                    result = calcMinus(result, Integer.parseInt(numbers.get(i + 1)));
-                    break;
-                case "*":
-                    result = calcMet(result, Integer.parseInt(numbers.get(i + 1)));
-                    break;
-                case "/":
-                    result = calcDiv(result, Integer.parseInt(numbers.get(i + 1)));
-                    break;
-            }
+            result = getResult(result, i);
         }
 
+        return result;
+    }
+
+    private int getResult(int result, int i) {
+        switch (operators.get(i)) {
+            case "+":
+                result = calcAdd(result, Integer.parseInt(numbers.get(i + 1)));
+                break;
+            case "-":
+                result = calcMinus(result, Integer.parseInt(numbers.get(i + 1)));
+                break;
+            case "*":
+                result = calcMet(result, Integer.parseInt(numbers.get(i + 1)));
+                break;
+            case "/":
+                result = calcDiv(result, Integer.parseInt(numbers.get(i + 1)));
+                break;
+        }
         return result;
     }
 
